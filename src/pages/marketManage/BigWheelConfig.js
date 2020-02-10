@@ -173,14 +173,24 @@ export default class Page extends Component {
     }
   }
 
-  addPrizeProductClicked = (isUserDefined) => {
-    if (isUserDefined) {
-      this.showUploadModal();
-    } else {
-      this.setState({
-        selectProductModalIsVisible: true
-      })
+  addPrizeProductClicked = (type) => {
+
+    switch (type) {
+      case "private":
+        this.setState({
+          selectProductModalIsVisible: true
+        })
+        break;
+
+      case 'unprivate':
+        this.showUploadModal();
+        break;
+
+      case 'O2OCoupon':
+        this.showUploadModal();
+        break;
     }
+
   }
 
   _hideSelectProductModal = () => {
@@ -422,19 +432,27 @@ export default class Page extends Component {
                 this.props.isReEdit ?
                   null :
                   <div className="flex">
-                    <div onClick={() => { this.addPrizeProductClicked() }}
+                    <div onClick={() => { this.addPrizeProductClicked('private') }}
                       className='middle-center margin-right'
-                      style={{ width: "450px", border: '1px dashed #ccc', cursor: "pointer" }}>
+                      style={{ width: "300px", border: '1px dashed #ccc', cursor: "pointer" }}>
                       <div style={{ padding: "10px 50px" }}>
                         <Icon type='plus' className='margin-right' />添加自营奖品
                     </div>
                     </div>
-                    <div onClick={() => { this.addPrizeProductClicked(true) }}
+                    <div onClick={() => { this.addPrizeProductClicked('unprivate') }}
                       className='middle-center'
-                      style={{ width: "450px", border: '1px dashed #ccc', cursor: "pointer" }}>
+                      style={{ width: "300px", border: '1px dashed #ccc', cursor: "pointer" }}>
                       <div style={{ padding: "10px 50px" }}>
                         <Icon type='plus' className='margin-right' />添加非自营奖品
+                      </div>
                     </div>
+
+                    <div onClick={() => { this.addPrizeProductClicked('O2OCoupon') }}
+                      className='middle-center'
+                      style={{ width: "300px", border: '1px dashed #ccc', cursor: "pointer" }}>
+                      <div style={{ padding: "10px 50px" }}>
+                        <Icon type='plus' className='margin-right' />添加O2O优惠券
+                      </div>
                     </div>
                   </div>
               }

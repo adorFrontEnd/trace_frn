@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Col, Row, Checkbox, Card, Modal, Spin, Form, Switch, DatePicker, Button, Input, Table, Select, InputNumber } from 'antd';
+import { Col, Row, Checkbox, Card, Modal, Spin, Form, Switch, DatePicker, Button, Input, Table, Select, InputNumber, Radio } from 'antd';
 import Toast from '../../utils/toast';
 import CommonPage from '../../components/common-page';
 import { SearchForm } from '../../components/common-form';
@@ -13,6 +13,7 @@ import { ImageDrop } from 'quill-image-drop-module';
 import 'react-quill/dist/quill.snow.css';
 import AreaSelectModal from '../../components/areaSelect/AreaSelectModal';
 import PicturesWallModal from '../../components/upload/PictureWallModal';
+import PictureWall from '../../components/upload/PictureWall';
 
 const _description = "";
 const _NOW = Date.now();
@@ -38,7 +39,9 @@ class Page extends Component {
     showRichTextValidateInfo: false,
     richText: null,
     acivityIsEnd: false,
-    isBigWheel: false
+    isBigWheel: false,
+    logoImage: null,
+    showLogoImgValidateInfo: false
   }
 
   componentWillMount() {
@@ -66,7 +69,7 @@ class Page extends Component {
     getDetail({ id })
       .then(activityDetail => {
 
-        let { name, description, type, restrict, phoneBinding, startActivityTime, endActivityTime, areaName, areaId, detail } = activityDetail;
+        let { name, description, logoImage, type, restrict, phoneBinding, startActivityTime, endActivityTime, areaName, areaId, detail } = activityDetail;
 
         let checkedAreaData = areaId ? areaId.split(',').map(item => { return { id: item, arealevel: 2 } }) : [];
         let time = [moment(startActivityTime), moment(endActivityTime)]
@@ -80,6 +83,7 @@ class Page extends Component {
           phoneBindingChecked,
           checkedAreaData,
           richText: detail,
+          logoImage,
           isBigWheel,
           acivityIsEnd: _NOW > endActivityTime
         })
@@ -142,18 +146,35 @@ class Page extends Component {
         return;
       }
 
+
+      let logoImage = type == '2' ? this.state.logoImage : null;
+      if (type == '2') {
+        if (!logoImage) {
+          this.setState({
+            showLogoImgValidateInfo: true
+          })
+          return;
+        } else {
+          this.setState({
+            showLogoImgValidateInfo: false
+          })
+        }
+      }
+
+
       let [startTime, stopTime] = time;
       let startActivityTimeStamp = dateUtil.getDayStartStamp(Date.parse(startTime));
       let endActivityTimeStamp = dateUtil.getDayStopStamp(Date.parse(stopTime));
 
       let id = !this.state.id || this.state.id == '0' ? null : this.state.id;
       let areaId = this.state.selectAreaIds;
-      let areaName = type == '2' ? '全国' : this.state.selectAreaNames;
+      let areaName = this.state.selectAreaNames;
       let data = {
         ...params,
         type,
         time: null,
         areaId,
+        logoImage,
         areaName,
         phoneBinding,
         startActivityTimeStamp,
@@ -279,6 +300,21 @@ class Page extends Component {
     'link', 'image', 'video'
   ]
 
+  uploadActivityLogoPic = (picList) => {
+    let logoImage = ''
+    if (!picList || !picList.length) {
+      this.setState({
+        logoImage
+      })
+      return;
+    }
+    logoImage = picList[0];
+    this.setState({
+      logoImage
+    })
+  }
+
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { selectAreaNames } = this.state;
@@ -318,7 +354,7 @@ class Page extends Component {
                 {
                   getFieldDecorator('description', {
                     rules: [
-                      { required: true, message: '请填写活动描述!' }
+                      { required: true, message: '请填写活动描述!' },
                     ]
                   })(
                     <Input disabled={this.state.isEdit && this.state.acivityIsEnd} minLength={0} maxLength={20} placeholder='请填写活动描述' />
@@ -363,22 +399,6 @@ class Page extends Component {
                 <span className='color-red padding-left'>一个普通用户最多能参与多少次活动</span>
               </Form.Item>
 
-              <Row className='line-height40 margin-top'>
-                <Col span={5} className='text-right'>
-                  <span className='label-color'>绑定手机号：</span>
-                </Col>
-                <Col span={19}>
-                  <Switch disabled={this.state.isEdit} checked={this.state.phoneBindingChecked} onChange={this.onPhoneBindingChange} />
-                  {
-                    this.state.isBigWheel ?
-                      <span className='color-red margin-left'>大转盘活动强制要求绑定手机号</span>
-                      :
-                      null
-                  }
-
-                </Col>
-              </Row>
-
               <Form.Item
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 19 }}
@@ -397,24 +417,86 @@ class Page extends Component {
 
               <Row className='line-height40 margin-top'>
                 <Col span={5} className='text-right'>
+                  <span className='label-color'>绑定手机号：</span>
+                </Col>
+                <Col span={19}>
+                  <Switch disabled={this.state.isEdit} checked={this.state.phoneBindingChecked} onChange={this.onPhoneBindingChange} />
+                  {
+                    this.state.isBigWheel ?
+                      <span className='color-red margin-left'>大转盘活动强制要求绑定手机号</span>
+                      :
+                      null
+                  }
+
+                </Col>
+              </Row>
+              {
+                this.state.isBigWheel ?
+                  <>
+                    <Row className='line-height40 margin-top margin-bottom'>
+                      <Col span={5} className='text-right'>
+                        <span className='label-color label-required'>活动logo：</span>
+                      </Col>
+                      <Col span={19} >
+                        <PictureWall
+                          allowType={['1', '2']}
+                          folder='trace'
+                          pictureList={this.state.logoImage ? [this.state.logoImage] : null}
+                          uploadCallback={this.uploadActivityLogoPic}
+                        />
+                        <div className='color-red' style={{ lineHeight: "16px" }}>建议尺寸420px*420px，图片格式png、jpg，大小不超过3MB</div>
+                        {
+                          this.state.showLogoImgValidateInfo ?
+                            <div className='line-height18 color-red' style={{ textAlign: "left" }}>请设置主图</div> :
+                            null
+                        }
+                      </Col>
+                    </Row>
+                    <Form.Item
+                      labelCol={{ span: 5 }}
+                      wrapperCol={{ span: 19 }}
+                      label='大转盘风格'
+                      field='styleType'>
+                      {
+                        getFieldDecorator('styleType', {
+                          rules: [
+                            { required: true, message: '请选择大转盘风格!' }
+                          ],
+                          initialValue: "1"
+                        })(
+                          <Radio.Group disabled={this.state.isEdit}>
+                            <Radio value='1' style={{ width: 200 }}>
+                              <span style={{ lineHeight: "40px" }}>风格一</span>
+                              <img style={{ width: 100, height: 100, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190724152147_1563952935774.png' />
+                            </Radio>
+                            <Radio value='2' style={{ width: 200 }}>
+                              <span style={{ lineHeight: "40px" }}>风格二</span>
+                              <span>
+                                <img style={{ width: 100, height: 100, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190724152147_1563952935774.png' />
+                              </span>
+                            </Radio>
+                          </Radio.Group>
+                        )
+                      }
+                    </Form.Item>
+                  </>
+                  :
+                  null
+              }
+
+
+
+
+              <Row className='line-height40 margin-top'>
+                <Col span={5} className='text-right'>
                   <span className='label-color label-required'>活动区域：</span>
                 </Col>
                 <Col span={19}>
                   <div>
-                    <Button type='primary' disabled={this.state.isBigWheel} onClick={this.selectAreaClicked}>选择活动区域</Button>
-                    {
-                      this.state.isBigWheel ?
-                        <span className='color-red margin-left'>大转盘活动为全国性活动，不可修改区域范围</span>
-                        :
-                        null
-                    }
+                    <Button type='primary' onClick={this.selectAreaClicked}>选择活动区域</Button>
                   </div>
                   <div>
-                    {
-                      this.state.isBigWheel ?
-                        "全国" :
-                        selectAreaNames
-                    }
+                    {selectAreaNames}
                   </div>
 
                 </Col>

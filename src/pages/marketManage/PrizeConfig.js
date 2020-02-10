@@ -160,7 +160,7 @@ class DealerList extends Component {
   revertType2_Data = (activityDetail) => {
 
 
-    let isReEdit = !!activityDetail;
+    let isReEdit = activityDetail && Object.keys(activityDetail).length>0;
 
     this.setState({
       activityDetail,
