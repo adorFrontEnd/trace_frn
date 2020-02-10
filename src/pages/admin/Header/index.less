@@ -1,0 +1,104 @@
+@import '../../../assets/css/theme.less';
+.header {
+  .header-top {  
+    background: @color-dark;
+    color: @color-white;
+    height: 60px; // line-height: 60px;
+    text-align: right;
+    a {
+      margin-left: 40px;
+    }
+    .user-login {
+      line-height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 100px;
+      padding: 5px 0;
+      cursor: pointer;
+      .avatar {
+        background-color: @color-white;
+        color: @color-dark;
+      }
+      .user-menu {
+        width: 200px;
+      }
+    }
+  }
+  .breadcrumb {
+    height: 50px;
+    line-height: 40px;
+    padding: 10px 20px 0;
+    display: flex;
+    align-items: center;   
+    .bread-nav {
+      min-width: 100px;
+      margin-right: 20px;
+    }   
+  }
+  .tabs-nav-container{
+    height: 60px;   
+    align-items: flex-end;
+    display: flex;
+    .tabs-nav {
+      height: 30px;
+      display: flex;
+      align-items: center;
+
+      .tabs-nav-item{      
+        border-radius: 8px 8px 0 0;
+        background-color: @color-light-gray;
+        border-right: 1px solid @color-gray;
+        line-height: 30px;
+        text-align: center;
+        height: 100%;
+        width:100px;
+        color: @color-dark;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 5px;
+        a{
+          margin: 0;
+          color: @color-dark;
+          &:hover,&:link,&:visited,&:active{
+            text-decoration:none;
+          }
+
+        }
+      }
+      .tabs-nav-item.active{
+        background-color: @color-white;        
+      }
+      .item-text{
+        line-height: 20px;
+        max-width: 60px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .tabs-before{
+        height: 100%;
+        width: 8px;
+        background: @color-white;
+        position: relative;
+        .tabs-before-top{
+          height: 20px;
+          width: 100%;
+          background:@color-dark 
+        }
+        &:before{
+          content: "";          
+          width: 100%;
+          height: 10px;
+          background: @color-dark;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          border-radius: 0 0 100% 0;
+        }
+      }
+    }   
+  }  
+}

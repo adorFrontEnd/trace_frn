@@ -1,0 +1,115 @@
+@import '../theme.less';
+@import '../theme-color.less';
+.component-border-top {
+  border-top: 10px solid #f7f7f7;
+}
+
+.item {
+  height: 24px;
+  line-height: 24px;
+}
+
+.item-lg {
+  height: 30px;
+  line-height: 30px;
+  font-size: 16px;
+}
+
+.item-title {
+  font-size: 14px;
+  height: 34px;
+  line-height: 24px;
+  padding: 5px 0;
+}
+
+.item-default {
+  padding: 10px 0;
+  border-bottom: 1px solid #f8f8f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.input-container {
+  border-bottom: 1px solid #f2f2f2;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.light-input {
+  width: 100%;
+  font-size: 11pt;
+  height: 40px;
+  line-height: 40px;
+  color: #333;
+}
+
+input.border {
+  border: 1px solid #ccc;
+  background-color: transparent;
+  border-radius: 3px;
+  height: 28px;
+  padding: 4px 10px;
+  color: #333;
+  line-height: 20px;
+}
+
+
+.blank-gray {
+  height: 16px;
+  background-color: #f2f2f2;
+}
+
+
+.border-title{
+  width: 100%;
+  text-align: center;
+  height: 30px; 
+  padding: 0 10%;
+}
+
+.border-title .border-title-line{
+  height: 15px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}
+
+.border-title .title{
+  height: 20px;
+  line-height: 20px;
+  display: inline-block;
+  background: #fff;
+  padding:0 10px;
+  position: relative;
+  z-index: 2;
+  top:-10px;
+}
+.edit-span,.delete-span{
+  cursor: pointer;
+}
+.edit-span{
+  color: @color-blue;
+}
+
+.delete-span{
+  color: @color-red;
+}
+
+/* 美化滚动条样式 */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  background-color: transparent;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  background-color: transparent;
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 7px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #001529;
+}

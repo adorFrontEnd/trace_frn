@@ -1,0 +1,26 @@
+{
+  "window.zoomLevel": 2,
+  "editor.fontSize": 11.5,
+  "workbench.iconTheme": "vscode-icons",
+  "files.autoSave": "onFocusChange",
+  "terminal.integrated.fontSize": 11.5,
+  "editor.tabSize": 2,
+  "fileheader.Author": "masecho",
+  "fileheader.LastModifiedBy": "masecho",
+  "files.associations": {
+    "*.cjson": "jsonc",
+    "*.wxss": "css",
+    "*.wxs": "javascript"
+  },
+  "emmet.includeLanguages": {
+    "wxml": "html",
+    "vue-html": "html",
+    "vue": "html"
+  },
+  "emmet.triggerExpansionOnTab":true,
+  "emmet.showAbbreviationSuggestions": true,
+  "javascript.validate.enable": false,
+  "workbench.colorTheme": "Darcula Theme from IntelliJ",
+  "bracketPairColorizer.showHorizontalScopeLine": false,
+  "explorer.confirmDelete": false
+}

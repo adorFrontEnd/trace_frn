@@ -1,0 +1,71 @@
+@import "../theme-color.less";
+
+body {
+  .yellow-btn.ant-btn {
+    background-color: @color-yellow;
+    border-color: @color-yellow;
+    color: @color-white;
+
+    &:hover,
+    &:focus {
+      background-color: @color-light-yellow;
+    }
+  }
+
+  .yellow-btn.ant-btn.active {
+    background-color: @color-deep-yellow;
+  }
+
+  .ant-table-thead>tr>th,
+  .ant-table-tbody>tr>td {
+    padding: 10px 8px;
+  }
+
+  .ant-modal-body .ant-form-item.ant-form-item-with-help,
+  .common-form .ant-form-item.ant-form-item-with-help {
+    margin-bottom: 0;
+  }
+
+  .common-form .ant-form-item,
+  .ant-modal-body .ant-form-item {
+    margin-bottom: 4px;
+  }
+
+  .ant-modal.noPadding .ant-modal-body {
+    padding: 0
+  }
+
+  .ant-btn.normal {
+    width: 100px;
+  }
+
+  .ant-upload-select-picture-card i {
+    font-size: 32px;
+    color: #999;
+  }
+
+  .ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+  }
+
+  .ant-upload-list-picture-card .ant-upload-list-item-info:before {
+    left: 0;
+    top: 0;
+  }
+
+  .ql-container.ql-snow {
+    min-height: 500px
+  }
+
+  pre {
+    font-family: sans-serif;  
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -ms-overflow-style: scrollbar;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    margin-bottom: 0;
+    overflow: initial;
+  }
+
+}
