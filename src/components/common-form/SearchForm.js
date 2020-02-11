@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { Input, Select, Form, Button, Checkbox, Radio, DatePicker, AutoComplete } from 'antd'
-import DateRange from './DatetimePicker';
-import locale from 'antd/lib/date-picker/locale/zh_CN';
-import moment, { relativeTimeRounding } from 'moment';
+import { Input, Select, Form, Button, Checkbox, InputNumber, DatePicker } from 'antd'
+import moment from 'moment';
 import Toast from '../../utils/toast';
 
 const FormItem = Form.Item;
@@ -51,6 +49,7 @@ class SearchForm extends Component {
         switch (item.type) {
 
           // 下拉选择
+          default:
           case "SELECT":
             const select = <FormItem label={label} key={field} colon={colon} style={style}>
               {
@@ -179,6 +178,43 @@ class SearchForm extends Component {
             formItems.push(RANGE);
             break;
 
+          // 输入框
+          case "INPUT_NUMBER_RANGE":
+            const INPUT_NUMBER_START = <FormItem label={label} key={field} colon={colon}>
+              {
+                getFieldDecorator(field)(
+                  <InputNumber
+                    {...props}
+                    onChange={this.onChange}
+                    style={style}
+                    addonAfter={addonAfter}
+                    addonBefore={addonBefore}
+                    placeholder={placeholder}
+                  />
+                )
+              }
+            </FormItem>
+            const INPUT_NUMBER_STOP = <FormItem label={labelStop || "~"} key={fieldStop} colon={false}>
+              {
+                getFieldDecorator(fieldStop)(
+                  <InputNumber
+                    {...props}
+                    onChange={this.onChange}
+                    style={styleStop}
+                    addonAfter={addonAfterStop}
+                    addonBefore={addonBeforeStop}
+                    placeholder={placeholderStop}
+                  />
+                )
+              }
+            </FormItem>
+            const NUMBER_RANGE = <div key={field + fieldStop} style={{ display: "inline-block" }}>
+              {INPUT_NUMBER_START}{INPUT_NUMBER_STOP}
+            </div>
+            formItems.push(NUMBER_RANGE);
+            break;
+
+
           case "DATE":
             const startTime = <FormItem label={label || "选择时间"} key={"startTime"}>
               {
@@ -201,20 +237,20 @@ class SearchForm extends Component {
             formItems.push(DATE);
             break;
 
-            case "DATE_YM":
-              const _time = <FormItem label={label || "选择时间"} key={"time"}>
-                {
-                  getFieldDecorator(field, {
-                    initialValue: initialValue || moment(Date.now())
-                  })(
-                    <DatePicker.MonthPicker  onChange={this.onChange} style={{ width: 150 }} showTime={true} placeholder={placeholder || "请选择时间"} format="YYYY-MM" />
-                  )
-                }
-              </FormItem>;
-              const DATE_YM = <div key='dateRange' style={{ display: "inline-block" }}>
-                {_time}
-              </div>
-              formItems.push(DATE_YM);
+          case "DATE_YM":
+            const _time = <FormItem label={label || "选择时间"} key={"time"}>
+              {
+                getFieldDecorator(field, {
+                  initialValue: initialValue || moment(Date.now())
+                })(
+                  <DatePicker.MonthPicker onChange={this.onChange} style={{ width: 150 }} showTime={true} placeholder={placeholder || "请选择时间"} format="YYYY-MM" />
+                )
+              }
+            </FormItem>;
+            const DATE_YM = <div key='dateRange' style={{ display: "inline-block" }}>
+              {_time}
+            </div>
+            formItems.push(DATE_YM);
             break;
 
         }

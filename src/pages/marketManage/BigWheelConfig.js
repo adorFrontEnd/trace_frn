@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { Col, Row, Checkbox, Card, Modal, Spin, Form, Popconfirm, Radio, Switch, Icon, DatePicker, Button, Input, Table, Select, InputNumber } from 'antd';
+import { Col, Row, Spin, Popconfirm, Icon, DatePicker, Button, Input, Select, InputNumber } from 'antd';
 import moment from 'moment';
 import SelectProduct from '../../components/selectProduct/SelectProduct';
 import Toast from '../../utils/toast';
-import { isAddProductIdIndexOfProductList, getAddProductArr, formatOwnProductArr } from './prizeConfigUtil';
+import { formatOwnProductArr } from './prizeConfigUtil';
 import UserDefinedProductModal from '../../components/selectProduct/UserDefinedProductModal';
+import SelectO2OCoupon from '../../components/coupon/SelectO2OCoupon';
+import { isAdorPayOpened } from '../../api/setting/setting';
 import ColorPicker from '../../components/colorPicker/ColorPicker';
 
 
@@ -16,14 +18,22 @@ export default class Page extends Component {
     expireConstantTime: null,
     expireConstantDays: 1,
     selectProductModalIsVisible: false,
+    selectO2OCouponModalIsVisible: false,
     bigWheelProductArr: null,
-    uploadModalVisible: false
+    uploadModalVisible: false,
+    hasO2OAuth: false
   }
+
 
   componentWillReceiveProps(props) {
     if (props.isReEdit && !this.props.isReEdit && props.configDetail) {
       this.revertData(props.configDetail);
     }
+  }
+
+
+  componentDidMount() {
+    this.getO2OAuth();
   }
 
   revertData = (activityDetail) => {
@@ -56,6 +66,16 @@ export default class Page extends Component {
     if (params) {
       this.props.saveClicked(params);
     }
+  }
+
+  //o2o权限   
+  getO2OAuth = () => {
+    isAdorPayOpened()
+      .then(() => {
+        this.setState({
+          hasO2OAuth: true
+        })
+      })
   }
 
 
@@ -173,9 +193,12 @@ export default class Page extends Component {
     }
   }
 
+
+  /**添加奖品或者优惠券 **********************************************************************************/
   addPrizeProductClicked = (type) => {
 
     switch (type) {
+      default:
       case "private":
         this.setState({
           selectProductModalIsVisible: true
@@ -187,7 +210,7 @@ export default class Page extends Component {
         break;
 
       case 'O2OCoupon':
-        this.showUploadModal();
+        this.showO2OCouponModal();
         break;
     }
 
@@ -288,6 +311,28 @@ export default class Page extends Component {
     this.setState({
       bigWheelProductArr
     })
+  }
+
+  showO2OCouponModal = () => {
+    this.setState({
+      selectO2OCouponModalIsVisible: true
+    })
+  }
+
+  _hideO2OCouponModal = () => {
+    this.setState({
+      selectO2OCouponModalIsVisible: false
+    })
+  }
+
+  onSelectO2OCouponConfirmClick = (selectRows) => {
+    let bigWheelProductArr = this.state.bigWheelProductArr || [];
+    let activityId = this.props.activityId;
+    let newArr = formatOwnProductArr(selectRows, activityId);
+    this.setState({
+      bigWheelProductArr: [...bigWheelProductArr, ...newArr]
+    })
+    this._hideO2OCouponModal();
   }
 
   render() {
@@ -440,20 +485,23 @@ export default class Page extends Component {
                     </div>
                     </div>
                     <div onClick={() => { this.addPrizeProductClicked('unprivate') }}
-                      className='middle-center'
+                      className='middle-center margin-right'
                       style={{ width: "300px", border: '1px dashed #ccc', cursor: "pointer" }}>
                       <div style={{ padding: "10px 50px" }}>
                         <Icon type='plus' className='margin-right' />添加非自营奖品
                       </div>
                     </div>
-
-                    <div onClick={() => { this.addPrizeProductClicked('O2OCoupon') }}
-                      className='middle-center'
-                      style={{ width: "300px", border: '1px dashed #ccc', cursor: "pointer" }}>
-                      <div style={{ padding: "10px 50px" }}>
-                        <Icon type='plus' className='margin-right' />添加O2O优惠券
-                      </div>
-                    </div>
+                    {
+                      this.state.hasO2OAuth ?
+                        <div onClick={() => { this.addPrizeProductClicked('O2OCoupon') }}
+                          className='middle-center'
+                          style={{ width: "300px", border: '1px dashed #ccc', cursor: "pointer" }}>
+                          <div style={{ padding: "10px 50px" }}>
+                            <Icon type='plus' className='margin-right' />添加O2O优惠券
+                          </div>
+                        </div>
+                        : null
+                    }
                   </div>
               }
             </div>
@@ -469,6 +517,12 @@ export default class Page extends Component {
           visible={this.state.uploadModalVisible}
           onCancel={this.hideUploadModal}
           onOk={this.onUserDefinedProductlOk}
+        />
+
+        <SelectO2OCoupon
+          visible={this.state.selectO2OCouponModalIsVisible}
+          hide={this._hideO2OCouponModal}
+          onOk={this.onSelectO2OCouponConfirmClick}
         />
       </div>
     )
