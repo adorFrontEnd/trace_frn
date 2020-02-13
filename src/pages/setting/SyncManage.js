@@ -11,7 +11,7 @@ class Page extends Component {
   state = {
     status: false,
     pageData: null,
-    showLoading:false
+    showLoading: false
   }
 
   componentDidMount() {
@@ -20,13 +20,13 @@ class Page extends Component {
 
   getPageData = () => {
     this.setState({
-      showLoading:true
+      showLoading: true
     })
     getOnlineShopConfigDetail()
       .then(pageData => {
         this.setState({
           pageData,
-          showLoading:false
+          showLoading: false
         })
         if (!pageData || !pageData.id) {
           this.props.form.setFieldsValue({ appId: "", secret: "", accessToken: "" });
@@ -41,9 +41,9 @@ class Page extends Component {
         })
         this.props.form.setFieldsValue({ appId, secret, accessToken });
       })
-      .catch(()=>{
-        this.setState({       
-          showLoading:false
+      .catch(() => {
+        this.setState({
+          showLoading: false
         })
       })
   }
@@ -82,7 +82,9 @@ class Page extends Component {
         id = pageData.id
       }
       let { appId, secret, accessToken } = params;
-      saveOrUpdateOnlineShopConfig({ id, appId, secret, accessToken })
+      let status = this.state.status == '1' ? "1" : "0";
+      
+      saveOrUpdateOnlineShopConfig({ id, appId, secret, accessToken,status })
         .then(() => {
           Toast('保存成功');
           this.getPageData();

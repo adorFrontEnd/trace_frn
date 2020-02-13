@@ -357,6 +357,14 @@ const routerConfigArr = [
     title: "中奖日志"
   },  
   {
+    route_name: "marketManage.signConfig",
+    path: baseRoute + "/marketManage/signConfig",
+    loginRequired: true,
+    moduleAuth: true,
+    title: "签到配置",
+    icon: "form"
+  },  
+  {
     route_name: "o2oManage",
     title: "O2O管理",
     icon: "shop",

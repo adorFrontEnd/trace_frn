@@ -173,7 +173,7 @@ export default class Page extends Component {
               <span className='label-color label-required'>配置发现范围：</span>
             </Col>
             <Col span={19} >
-              <InputNumber precision='2' value={this.state.distance} min={0} onChange={this.onDistanceChange} />公里范围内
+              <InputNumber precision={2} value={this.state.distance} min={0} onChange={this.onDistanceChange} />公里范围内
             </Col>
           </Row>
           <div className='flex-between padding align-center' >

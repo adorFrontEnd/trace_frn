@@ -40,7 +40,7 @@ class Page extends Component {
     richText: null,
     acivityIsEnd: false,
     isBigWheel: false,
-    logoImage: null,
+    logoUrl: null,
     showLogoImgValidateInfo: false
   }
 
@@ -69,7 +69,7 @@ class Page extends Component {
     getDetail({ id })
       .then(activityDetail => {
 
-        let { name, description, logoImage, type, restrict, phoneBinding, startActivityTime, endActivityTime, areaName, areaId, detail } = activityDetail;
+        let { name, description, logoUrl, type, restrict,style, phoneBinding, startActivityTime, endActivityTime, areaName, areaId, detail } = activityDetail;
 
         let checkedAreaData = areaId ? areaId.split(',').map(item => { return { id: item, arealevel: 2 } }) : [];
         let time = [moment(startActivityTime), moment(endActivityTime)]
@@ -83,13 +83,13 @@ class Page extends Component {
           phoneBindingChecked,
           checkedAreaData,
           richText: detail,
-          logoImage,
+          logoUrl,
           isBigWheel,
-          acivityIsEnd: _NOW > endActivityTime
+          acivityIsEnd: _NOW > endActivityTime          
         })
         restrict = parseInt(restrict);
         this.props.form.setFieldsValue({
-          name, description, type, restrict, phoneBinding, time
+          name, description, type, restrict, phoneBinding, time,style
         });
         this._hideActivityDetailLoading();
 
@@ -147,9 +147,9 @@ class Page extends Component {
       }
 
 
-      let logoImage = type == '2' ? this.state.logoImage : null;
+      let logoUrl = type == '2' ? this.state.logoUrl : null;
       if (type == '2') {
-        if (!logoImage) {
+        if (!logoUrl) {
           this.setState({
             showLogoImgValidateInfo: true
           })
@@ -174,7 +174,7 @@ class Page extends Component {
         type,
         time: null,
         areaId,
-        logoImage,
+        logoUrl,
         areaName,
         phoneBinding,
         startActivityTimeStamp,
@@ -301,16 +301,16 @@ class Page extends Component {
   ]
 
   uploadActivityLogoPic = (picList) => {
-    let logoImage = ''
+    let logoUrl = ''
     if (!picList || !picList.length) {
       this.setState({
-        logoImage
+        logoUrl
       })
       return;
     }
-    logoImage = picList[0];
+    logoUrl = picList[0];
     this.setState({
-      logoImage
+      logoUrl
     })
   }
 
@@ -441,13 +441,13 @@ class Page extends Component {
                         <PictureWall
                           allowType={['1', '2']}
                           folder='trace'
-                          pictureList={this.state.logoImage ? [this.state.logoImage] : null}
+                          pictureList={this.state.logoUrl ? [this.state.logoUrl] : null}
                           uploadCallback={this.uploadActivityLogoPic}
                         />
                         <div className='color-red' style={{ lineHeight: "16px" }}>建议尺寸420px*420px，图片格式png、jpg，大小不超过3MB</div>
                         {
                           this.state.showLogoImgValidateInfo ?
-                            <div className='line-height18 color-red' style={{ textAlign: "left" }}>请设置主图</div> :
+                            <div className='line-height18 color-red' style={{ textAlign: "left" }}>请设置logo</div> :
                             null
                         }
                       </Col>
@@ -456,20 +456,20 @@ class Page extends Component {
                       labelCol={{ span: 5 }}
                       wrapperCol={{ span: 19 }}
                       label='大转盘风格'
-                      field='styleType'>
+                      field='style'>
                       {
-                        getFieldDecorator('styleType', {
+                        getFieldDecorator('style', {
                           rules: [
                             { required: true, message: '请选择大转盘风格!' }
                           ],
-                          initialValue: "1"
+                          initialValue: 1
                         })(
                           <Radio.Group disabled={this.state.isEdit}>
-                            <Radio value='1' style={{ width: 200 }}>
+                            <Radio value={1} style={{ width: 200 }}>
                               <span style={{ lineHeight: "40px" }}>风格一</span>
                               <img style={{ width: 100, height: 100, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190724152147_1563952935774.png' />
                             </Radio>
-                            <Radio value='2' style={{ width: 200 }}>
+                            <Radio value={2} style={{ width: 200 }}>
                               <span style={{ lineHeight: "40px" }}>风格二</span>
                               <span>
                                 <img style={{ width: 100, height: 100, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190724152147_1563952935774.png' />
