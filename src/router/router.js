@@ -56,6 +56,7 @@ const GiftRecord = asyncComponent(() => import("../pages/marketManage/GiftRecord
 const WriteOffLogManage = asyncComponent(() => import("../pages/marketManage/WriteOffLogManage"));
 const BigWheelRecord = asyncComponent(() => import("../pages/marketManage/BigWheelRecord"));
 const SignConfig = asyncComponent(() => import("../pages/marketManage/SignConfig"));
+const MainIntegralRecord = asyncComponent(() => import("../pages/marketManage/MainIntegralRecord"));
 
 const MerchantManage = asyncComponent(() => import("../pages/o2oManage/MerchantManage"));
 const MerchantEdit = asyncComponent(() => import("../pages/o2oManage/MerchantEdit"));
@@ -124,7 +125,8 @@ export default class GlobalRouter extends React.Component {
                   <PrivateRoute path={routerConfig["marketManage.integralLog"].path + '/:id'} component={IntegralLog} />
                   <PrivateRoute path={routerConfig["marketManage.bigWheelRecord"].path + '/:id'} component={BigWheelRecord} />
                   <PrivateRoute path={routerConfig["marketManage.signConfig"].path} component={SignConfig} />
-
+                  <PrivateRoute path={routerConfig["marketManage.mainIntegralRecord"].path} component={MainIntegralRecord} />
+                  
                   <PrivateRoute path={routerConfig["marketManage.userList"].path} component={UserList} />
                   <PrivateRoute path={routerConfig["marketManage.integralRecord"].path + '/:id'} component={IntegralRecord} />
                   <PrivateRoute path={routerConfig["marketManage.giftRecord"].path + '/:id'} component={GiftRecord} />

@@ -363,7 +363,15 @@ const routerConfigArr = [
     moduleAuth: true,
     title: "签到配置",
     icon: "form"
-  },  
+  }, 
+  {
+    route_name: "marketManage.mainIntegralRecord",
+    path: baseRoute + "/marketManage/mainIntegralRecord",
+    loginRequired: true,
+    moduleAuth: true,    
+    title: "积分记录",
+    icon: "project"
+  }, 
   {
     route_name: "o2oManage",
     title: "O2O管理",

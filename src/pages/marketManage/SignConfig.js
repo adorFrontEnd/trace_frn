@@ -6,54 +6,131 @@ import { SearchForm } from '../../components/common-form';
 import dateUtil from '../../utils/dateUtil';
 import { connect } from 'react-redux';
 import { changeRoute } from '../../store/actions/route-actions'
+import { getSignInConfigDetail, saveOrUpdateSignInConfig } from "../../api/signConfig/signConfig";
+import { NavLink, Link } from 'react-router-dom';
+import { baseRoute, routerConfig } from '../../config/router.config';
 
 const _title = "签到配置"
 const _description = "";
-
+const mainIntegralRecord = routerConfig["marketManage.mainIntegralRecord"].path;
 
 class Page extends Component {
   state = {
     showLoading: false,
-    signConfigArr: [],
-    signModeConfig:[]
+    signDayConfigArr: [],
+    signModeConfigArr: [],
+    signConfigData: null
   }
 
   componentDidMount() {
-    this.initSignConfigArr();
+    this.initsignDayConfigArr();
+    this.props.changeRoute({ path: 'marketManage.signConfig', title: _title, parentTitle: '营销工具' });
   }
 
 
-  initSignConfigArr = () => {
+  initsignDayConfigArr = () => {
 
     this.setState({
-      signConfigArr: [1, 1, 1, 1]
+      showLoading: true
     })
+    getSignInConfigDetail()
+      .then(signConfigData => {
+        this.setState({
+          showLoading: false
+        })
+        if (!signConfigData) {
+          this.setState({
+            signDayConfigArr: [1, 1, 1, 1]
+          })
+          return;
+        }
+        let { status, loop, continuous, integralValue } = signConfigData;
+        let signModeConfigArr = [];
+
+        if (status == '1') {
+          signModeConfigArr.push('status');
+        }
+        if (loop == '1') {
+          signModeConfigArr.push('loop');
+        }
+        if (continuous == '1') {
+          signModeConfigArr.push('continuous');
+        }
+
+        let signDayConfigArr = integralValue ? integralValue.split(',') : [1, 1, 1, 1];
+
+        this.setState({
+          signConfigData,
+          signModeConfigArr,
+          signDayConfigArr
+        })
+      })
+      .catch(() => {
+        this.setState({
+          signDayConfigArr: [1, 1, 1, 1],
+          showLoading: false
+        })
+      })
   }
 
   onsignConfigChange = (action, index, value) => {
-    let { signConfigArr } = this.state;
+    let { signDayConfigArr } = this.state;
     switch (action) {
       case "edit":
-        signConfigArr[index] = value;
+        signDayConfigArr[index] = value;
         break;
 
       case "delete":
-        signConfigArr.splice(index, 1);
+        signDayConfigArr.splice(index, 1);
         break;
 
       default:
       case 'add':
-        signConfigArr.push(1);
+        signDayConfigArr.push(1);
         break;
     }
 
     this.setState({
-      signConfigArr
+      signDayConfigArr
     })
   }
 
-  onsignModeChange = (signModeConfig) => {
-    this.setState({ signModeConfig })
+  onsignModeChange = (signModeConfigArr) => {
+    this.setState({ signModeConfigArr })
+  }
+
+  saveClicked = () => {
+    let { signModeConfigArr, signDayConfigArr, signConfigData } = this.state;
+    let isValidsignDayConfigArr = signDayConfigArr.filter(item => !item || parseInt(item) <= 0).length <= 0;
+    if (!isValidsignDayConfigArr) {
+      Toast('请设置大于0的积分！');
+      return;
+    }
+    let status = signModeConfigArr.indexOf('status') != -1 ? '1' : "0";
+    let loop = signModeConfigArr.indexOf('loop') != -1 ? '1' : "0";
+    let continuous = signModeConfigArr.indexOf('continuous') != -1 ? '1' : "0";
+    let integralValue = signDayConfigArr.join();
+    let id = signConfigData ? signConfigData.id : null;
+    let params = { id, status, loop, continuous, integralValue };
+    this.setState({
+      showLoading: true
+    })
+    saveOrUpdateSignInConfig(params)
+      .then(() => {
+        Toast('保存成功！');
+        this.setState({
+          showLoading: false
+        })
+      })
+      .catch(() => {
+        this.setState({
+          showLoading: false
+        })
+      })
+  }
+
+  goMainIntegralRecord = () => {
+
   }
 
   render() {
@@ -64,16 +141,18 @@ class Page extends Component {
         <Spin spinning={this.state.showLoading}>
           <div>
             <Button type='primary' className='margin-right20 normal' onClick={this.saveClicked}>保存</Button>
-            <Button type='primary' onClick={this.saveClicked}>查看积分记录</Button>
+            <NavLink to={mainIntegralRecord}>
+              <Button type='primary'>查看积分记录</Button>
+            </NavLink>
           </div>
           <div className='margin-top '>
-            <Checkbox.Group value={this.state.signModeConfig} onChange={this.onsignModeChange}>
+            <Checkbox.Group value={this.state.signModeConfigArr} onChange={this.onsignModeChange}>
               <Row className='line-height40'>
                 <Col span={24} >
-                  <Checkbox value="start">开启签到</Checkbox>
+                  <Checkbox value="status">开启签到</Checkbox>
                 </Col>
                 <Col span={24}>
-                  <Checkbox value="infinite">循环模式</Checkbox>
+                  <Checkbox value="loop">循环模式</Checkbox>
                   <span className='color-red margin-left'>开启循环模式后，最后一天签到结束，下一天按照第一天重启一个循环；如未开启，则最后一天签到后继续签到，按最后一天的奖励进行计算</span>
                 </Col>
                 <Col span={24} >
@@ -85,8 +164,8 @@ class Page extends Component {
           </div>
           <div className='flex-wrap' style={{ maxWidth: 1000 }}>
             {
-              this.state.signConfigArr && this.state.signConfigArr.length ?
-                this.state.signConfigArr.map((item, index) =>
+              this.state.signDayConfigArr && this.state.signDayConfigArr.length ?
+                this.state.signDayConfigArr.map((item, index) =>
                   <div key={index} className='flex-middle margin-right margin-bottom20'>
                     <div className='padding bgcolorF2F2F2 border-radius'>
                       <span style={{ display: "inline-block", width: 44 }}>第{index + 1}天</span>

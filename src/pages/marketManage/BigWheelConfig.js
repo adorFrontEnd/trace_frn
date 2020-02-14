@@ -225,7 +225,8 @@ export default class Page extends Component {
   onSelectProductConfirmClick = (selectRows) => {
     let bigWheelProductArr = this.state.bigWheelProductArr || [];
     let activityId = this.props.activityId;
-    let newArr = formatOwnProductArr(selectRows, activityId);
+    let type = '0';
+    let newArr = formatOwnProductArr(selectRows, activityId,type);
     this.setState({
       bigWheelProductArr: [...bigWheelProductArr, ...newArr]
     })
@@ -296,7 +297,8 @@ export default class Page extends Component {
     let productData = { image: url, name };
     let bigWheelProductArr = this.state.bigWheelProductArr || [];
     let activityId = this.props.activityId;
-    let newArr = formatOwnProductArr([productData], activityId);
+    let type = '1';
+    let newArr = formatOwnProductArr([productData], activityId, type);
     this.setState({
       bigWheelProductArr: [...bigWheelProductArr, ...newArr]
     })
@@ -326,9 +328,11 @@ export default class Page extends Component {
   }
 
   onSelectO2OCouponConfirmClick = (selectRows) => {
+    
     let bigWheelProductArr = this.state.bigWheelProductArr || [];
     let activityId = this.props.activityId;
-    let newArr = formatOwnProductArr(selectRows, activityId);
+    let type = '2';
+    let newArr = formatOwnProductArr(selectRows, activityId,type);
     this.setState({
       bigWheelProductArr: [...bigWheelProductArr, ...newArr]
     })
@@ -349,7 +353,7 @@ export default class Page extends Component {
             <div className='line-height40 flex-middle'>
               <span >参与一次活动消耗的积分：</span>
               <InputNumber
-                disabled={this.props.isReEdit}
+                disabled={!!this.props.isReEdit}
                 value={this.state.activityPoint}
                 onChange={(e) => { this.onActivityPointQuantityChange(e) }}
                 style={{ width: 120 }}

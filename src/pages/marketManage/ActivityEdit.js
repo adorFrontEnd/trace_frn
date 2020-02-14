@@ -465,14 +465,14 @@ class Page extends Component {
                           initialValue: 1
                         })(
                           <Radio.Group disabled={this.state.isEdit}>
-                            <Radio value={1} style={{ width: 200 }}>
+                            <Radio value={1} style={{ width: 240 }}>
                               <span style={{ lineHeight: "40px" }}>风格一</span>
-                              <img style={{ width: 100, height: 100, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190724152147_1563952935774.png' />
+                              <img style={{ width: 120, height: 120, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/RT1_1581655209089.png' />
                             </Radio>
                             <Radio value={2} style={{ width: 200 }}>
                               <span style={{ lineHeight: "40px" }}>风格二</span>
                               <span>
-                                <img style={{ width: 100, height: 100, display: "block" }} src='http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190724152147_1563952935774.png' />
+                                <img style={{ width: 120, height: 120, display: "block" }} src="http://ador-babycar.oss-cn-hangzhou.aliyuncs.com/maintenance/trace/RT2_1581655352946.png" />
                               </span>
                             </Radio>
                           </Radio.Group>

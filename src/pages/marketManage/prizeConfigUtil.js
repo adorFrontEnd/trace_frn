@@ -42,12 +42,21 @@ const formatOwnProductArr = (arr, activityId) => {
     return;
   }
   let result = arr.map(item => {
-    let { id, image, name } = item;
+    let { id, image, name, scope, voucherId } = item;
     let _id = Date.now() + Math.random() * 10000;
     let data = { _id, productId: id, prizeImage: image, prizeName: name, prizeLevel: null, prizeNumber: 1, oddsOfWinning: 0, wonNumber: 0, color: "FFFFF" };
     if (activityId) {
       data.activityId = activityId;
     }
+
+    if (voucherId) {
+      data.voucherId = voucherId;
+    }
+
+    if (scope) {
+      data.scope = scope;
+    }
+
     return data;
   })
   return result;

@@ -354,6 +354,7 @@ class SearchForm extends Component {
   // 重置
   resetClicked = () => {
     this.props.form.resetFields();
+    this.props.resetClicked();
   }
 
   onChange = () => {

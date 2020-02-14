@@ -11,7 +11,7 @@ export default class Page extends Component {
     tableDataList: null,
     showTableLoading: false,
     selectedRowKeys: [],
-    distance: null
+    scope: null
   }
 
   params = {
@@ -81,13 +81,30 @@ export default class Page extends Component {
   }
 
   onOk = () => {
+
+    let scope = this.state.scope;
     let selectedRowKeys = this.state.selectedRowKeys;
     if (!selectedRowKeys || !selectedRowKeys.length) {
       Toast("请选择商品！");
       return;
     }
+
+    if (!scope) {
+      Toast("请配置发现范围的距离！");
+      return;
+    }
+
     let selectedRows = this.state.selectedRows;
-    this.props.onOk(selectedRows, selectedRowKeys);
+    let submitData = selectedRows.map(item => {
+      let { mainImage, id } = item;
+      return {
+        ...item,
+        scope,
+        image:mainImage,
+        voucherId:id        
+      }
+    })
+    this.props.onOk(submitData, selectedRowKeys,scope);
   }
 
   // 顶部查询表单
@@ -95,8 +112,8 @@ export default class Page extends Component {
 
     {
       type: "INPUT_NUMBER_RANGE",
-      field: "minPrice",
-      fieldStop: "maxPrice",
+      field: "startPrice",
+      fieldStop: "endPrice",
 
       placeholder: "最低价格",
       placeholderStop: "最高价格",
@@ -116,20 +133,15 @@ export default class Page extends Component {
   //查询按钮点击事件
   searchClicked = (params) => {
 
-    let distance = this.state.distance;
-    if(!distance){
-      Toast("请配置发现范围的距离！");
-      return;
-    } 
+
     let { inputData } = params;
     inputData = inputData || null;
     this.params = {
       page: 1,
       ...params,
-      distance,
       inputData
     }
-   
+
     this.getPageData();
   }
 
@@ -149,9 +161,15 @@ export default class Page extends Component {
     })
   }
 
-  onDistanceChange = (distance) => {
+  onscopeChange = (scope) => {
     this.setState({
-      distance
+      scope
+    })
+  }
+
+  resetClicked = () => {
+    this.setState({
+      scope: null
     })
   }
 
@@ -173,20 +191,21 @@ export default class Page extends Component {
               <span className='label-color label-required'>配置发现范围：</span>
             </Col>
             <Col span={19} >
-              <InputNumber precision={2} value={this.state.distance} min={0} onChange={this.onDistanceChange} />公里范围内
+              <InputNumber precision={2} value={this.state.scope} min={0} onChange={this.onscopeChange} />公里范围内
             </Col>
           </Row>
           <div className='flex-between padding align-center' >
             <Button className='margin-left' type='primary' onClick={this.clearSelection}>清除选择</Button>
-            <div style={{ textAlign: "right",width:780 }}>
+            <div style={{ textAlign: "right", width: 780 }}>
               <SearchForm
                 towRow={false}
                 searchClicked={this.searchClicked}
                 formItemList={this.formItemList}
+                resetClicked={this.resetClicked}
               />
             </div>
           </div>
-          
+
           <Table
             rowSelection={{
               onChange: this.onRowChange,
