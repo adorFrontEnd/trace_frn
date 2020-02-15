@@ -75,7 +75,7 @@ const _request = (url, params, method, options) => {
       }
 
       if (toastData.required) {
-        if(res.data.errorCode == "SYS.0003"){                   
+        if(res.data.errorCode == "SYS.0003" || res.data.errorCode == "SYS.0002"){                   
           Toast(toastData.overTokenErrorTitle, 'error');
           goLogin();
           userLogout();
