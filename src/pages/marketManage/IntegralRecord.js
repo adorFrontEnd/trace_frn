@@ -70,7 +70,7 @@ class DealerList extends Component {
 
     { title: "变更途径", dataIndex: "access", render: data => data || "--" },
     { title: "变更备注", dataIndex: "remark", render: data => data || "--" },
-    { title: "积分变更", dataIndex: "integral", render: (data,record) => `${record.type=='0'?"-":"+"}${data}` },
+    { title: "积分变更", dataIndex: "integral", render: (data, record) => `${record.type == '0' ? "-" : "+"}${data}` },
     { title: "变更时间", dataIndex: "createTime", render: data => dateUtil.getDateTime(data) || "--" }
   ]
 
@@ -101,15 +101,9 @@ class DealerList extends Component {
     attentionId = attentionId || this.state.attentionId;
     getIntegral({ attentionId })
       .then((data) => {
-        if (data && data.integral) {
-          this.setState({
-            integral: data.integral
-          })
-        } else {
-          this.setState({
-            integral: 0
-          })
-        }
+        this.setState({
+          integral: data || 0
+        })
       })
   }
 

@@ -72,7 +72,7 @@ const getAttentionDetail = (params) => {
 }
 
 const getIntegral = (params) => {
-  return baseHttpProvider.getApi('api/attention/getIntegralNew', params, { total: true })
+  return baseHttpProvider.getApi('api/attention/getIntegralNew', params)
 }
 
 const saveTurntablePrizeConfig = (params) => {
