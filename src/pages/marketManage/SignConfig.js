@@ -19,7 +19,8 @@ class Page extends Component {
     showLoading: false,
     signDayConfigArr: [],
     signModeConfigArr: [],
-    signConfigData: null
+    signConfigData: null,
+    remark:null
   }
 
   componentDidMount() {
@@ -44,7 +45,7 @@ class Page extends Component {
           })
           return;
         }
-        let { status, loop, continuous, integralValue } = signConfigData;
+        let { status, loop, continuous, integralValue,remark } = signConfigData;
         let signModeConfigArr = [];
 
         if (status == '1') {
@@ -62,7 +63,8 @@ class Page extends Component {
         this.setState({
           signConfigData,
           signModeConfigArr,
-          signDayConfigArr
+          signDayConfigArr,
+          remark
         })
       })
       .catch(() => {
@@ -100,18 +102,24 @@ class Page extends Component {
   }
 
   saveClicked = () => {
-    let { signModeConfigArr, signDayConfigArr, signConfigData } = this.state;
+    let { signModeConfigArr, signDayConfigArr, signConfigData,remark } = this.state;
     let isValidsignDayConfigArr = signDayConfigArr.filter(item => !item || parseInt(item) <= 0).length <= 0;
     if (!isValidsignDayConfigArr) {
       Toast('请设置大于0的积分！');
       return;
     }
+
+    if(!remark){
+      Toast('请编写活动说明！');
+      return;
+    }
+
     let status = signModeConfigArr.indexOf('status') != -1 ? '1' : "0";
     let loop = signModeConfigArr.indexOf('loop') != -1 ? '1' : "0";
     let continuous = signModeConfigArr.indexOf('continuous') != -1 ? '1' : "0";
     let integralValue = signDayConfigArr.join();
     let id = signConfigData ? signConfigData.id : null;
-    let params = { id, status, loop, continuous, integralValue };
+    let params = { id, status, loop, continuous, integralValue,remark};
     this.setState({
       showLoading: true
     })
@@ -131,6 +139,13 @@ class Page extends Component {
 
   goMainIntegralRecord = () => {
 
+  }
+
+  remarkChange = (e)=>{
+    let remark = e.currentTarget.value;
+    this.setState({
+      remark
+    })
   }
 
   render() {
@@ -194,6 +209,15 @@ class Page extends Component {
           <div className='margin-top'>
             <Button type='primary' className='normal' onClick={() => this.onsignConfigChange('add')}>新增天数</Button>
           </div>
+
+          <Row className='margin-top20' style={{width:600}}>
+            <Col span={5} className='text-right'>
+              <span className='label-color label-required'>编写活动说明：</span>
+            </Col>
+            <Col span={18}>
+             <Input.TextArea placeholder='编写活动说明' style={{minHeight:140}} value={this.state.remark} onChange={this.remarkChange}  />
+            </Col>
+          </Row>
 
         </Spin>
       </CommonPage>)
