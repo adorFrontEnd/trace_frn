@@ -1,14 +1,15 @@
 let domain = '';
 
-// 博文
-
 // domain = "http://47.103.71.160:7200";
 
 //正式服接口
-// domain = "https://gw.adorsmart.com/traceUserAdmin";
-domain = "http://47.103.71.160:7200";
+domain = "https://gw.adorsmart.com/traceUserAdmin";
+let uploadDomain = "http://sys.trace.adorsmart.com:7200";
 
-let uploadDomain = "http://47.103.71.160:7200";
+//测试服接口
+// domain = "http://47.103.71.160:7200";
+// let uploadDomain = "http://47.103.71.160:7200";
+
 let apiUrlPrefix = domain + "/";
 let uploadApiUrlPrefix = uploadDomain + "/";
 let picUrlPrefix = "http://ador-babycar.oss-cn-hangzhou.aliyuncs.com";
