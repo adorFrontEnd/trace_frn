@@ -7,10 +7,12 @@ domain = "https://gw.adorsmart.com/traceUserAdmin";
 let uploadDomain = "http://sys.trace.adorsmart.com:7200";
 
 //测试服接口
-// domain = "http://47.103.71.160:7200";
 // let uploadDomain = "http://47.103.71.160:7200";
 
+//本地接口
+// domain = "http://192.168.20.53:7200";
 let apiUrlPrefix = domain + "/";
+
 let uploadApiUrlPrefix = uploadDomain + "/";
 let picUrlPrefix = "http://ador-babycar.oss-cn-hangzhou.aliyuncs.com";
 let signKey = "94a7cbbf8511a288d22d4cf8705d61d0";

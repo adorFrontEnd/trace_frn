@@ -34,6 +34,10 @@ const saveOrUpdatePrize = (params) => {
   return baseHttpProvider.postApi('api/prizeConfig/saveOrUpdate', params)
 }
 
+const saveOrUpdatePrizeForm = (params) => {
+  return baseHttpProvider.postFormApi('api/prizeConfig/postForm/saveOrUpdate', params)
+}
+
 const searchWriteOffLogList = (params) => {
   return baseHttpProvider.postFormApi('api/writeOffLog/searchWriteOffLogList', { page: 1, size: 10, ...params },
     {
@@ -130,5 +134,6 @@ export {
   exportWinningLog,
   getWinningLogDetail,
   shipments,
-  getExpressMerchantList
+  getExpressMerchantList,
+  saveOrUpdatePrizeForm
 }

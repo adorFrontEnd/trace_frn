@@ -110,7 +110,7 @@ class ShippingDetails extends Component {
   _exportDetailsss = (record) => {
     let barCode = record.barCode;
     let month = record.month;
-    let id = this.props.match.params.id;
+    let { id } = record;
     let exportUrll = exportShippingDetails({ "barCode": barCode, "month": month, "id": id });
     if (!exportUrll) {
       Toast("导出失败！")

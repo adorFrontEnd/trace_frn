@@ -5,7 +5,7 @@ import { pagination } from '../../utils/pagination';
 import Toast from '../../utils/toast';
 import { SearchForm, SubmitForm } from '../../components/common-form';
 import dateUtil from '../../utils/dateUtil';
-import { selectByActivityId, saveOrUpdatePrize, saveTurntablePrizeConfig, selectTurntableByActivityId } from '../../api/activity/activity';
+import { selectByActivityId, saveOrUpdatePrize, saveOrUpdatePrizeForm, saveTurntablePrizeConfig, selectTurntableByActivityId } from '../../api/activity/activity';
 import { NavLink, Link } from 'react-router-dom';
 import { baseRoute, routerConfig } from '../../config/router.config';
 import { connect } from 'react-redux';
@@ -38,10 +38,10 @@ class DealerList extends Component {
     winningPoints1: 0,
     winningPoints2: 0,
     convertedQuantity: null,
-    turntableLoading:false
+    turntableLoading: false
   }
 
- 
+
 
   componentDidMount() {
     let urlParams = parseUrl(this.props.location.search);
@@ -160,7 +160,7 @@ class DealerList extends Component {
   revertType2_Data = (activityDetail) => {
 
 
-    let isReEdit = activityDetail && Object.keys(activityDetail).length>0;
+    let isReEdit = activityDetail && Object.keys(activityDetail).length > 0;
 
     this.setState({
       activityDetail,
@@ -251,7 +251,7 @@ class DealerList extends Component {
     excProductList = formatProductArr(excProductList);
     preProductList = formatProductArr(preProductList);
 
-    saveOrUpdatePrize({ id, type: 0, activityId, excProductList: JSON.stringify(excProductList), preProductList: JSON.stringify(preProductList) })
+    saveOrUpdatePrizeForm({ id, type: 0, activityId, excProductList: JSON.stringify(excProductList), preProductList: JSON.stringify(preProductList) })
       .then(() => {
         Toast('保存成功！')
         this.getPageData();
@@ -337,7 +337,7 @@ class DealerList extends Component {
     let id = activityDetail && activityDetail.id ? activityDetail.id : null;
     preProductList = formatProductArr(preProductList);
 
-    saveOrUpdatePrize({ id, type: 1, activityId, integralType, winningPoints, prizePoolQuantity, preProductList: JSON.stringify(preProductList) })
+    saveOrUpdatePrizeForm({ id, type: 1, activityId, integralType, winningPoints, prizePoolQuantity, preProductList: JSON.stringify(preProductList) })
       .then(() => {
         Toast('保存成功！')
         this.getPageData();
@@ -354,19 +354,19 @@ class DealerList extends Component {
   saveType2_DataClicked = (params) => {
     params.activityId = this.state.activityId;
     this.setState({
-      turntableLoading:true
+      turntableLoading: true
     })
     saveTurntablePrizeConfig(params)
       .then(() => {
         this.setState({
-          turntableLoading:false
+          turntableLoading: false
         })
         Toast("保存成功！");
         this.goEditBack();
       })
-      .catch(()=>{
+      .catch(() => {
         this.setState({
-          turntableLoading:false
+          turntableLoading: false
         })
       })
   }
@@ -610,9 +610,9 @@ class DealerList extends Component {
           {
             this.state.type == '2' ?
               //大转盘
-              
+
               <BigWheelConfig
-                spinning ={this.state.turntableLoading}
+                spinning={this.state.turntableLoading}
                 isReEdit={this.state.isReEdit}
                 configDetail={this.state.activityDetail}
                 saveClicked={this.saveType2_DataClicked}
