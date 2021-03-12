@@ -57,7 +57,7 @@
     "react-app-polyfill": "^0.1.3",
     "react-color": "^2.17.3",
     "react-copy-to-clipboard": "^5.0.1",
-    "react-dev-utils": "^6.1.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.6.3",
     "react-keeper": "^2.1.9",
     "react-quill": "^1.3.3",
